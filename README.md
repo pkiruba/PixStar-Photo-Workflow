@@ -96,3 +96,11 @@ These tips ensure the best experience on the digital frame.
 If you use "Random" sorting, photos will repeat randomly. To ensure every photo is displayed once before the cycle repeats:
 1. On the Pix-Star frame, navigate to the Slideshow Options menu.
 2. Change the Sorting Mode from "Random" to "Newest first" or "Oldest first".
+
+## 5.💡 Future Maintenance Options
+
+Beyond Pillow, here are other best options for photo maintenance and conversion:
+
+1. ImageMagick (CLI Tool): A powerful, cross-platform command-line tool. You can use it in your script or directly in a bash/command line workflow for bulk processing, resizing, and metadata stripping.
+2. ExifTool (CLI Tool): The industry standard for reading, writing, and editing metadata (EXIF, IPTC, XMP). If you ever need to selectively keep specific metadata (like date taken), this is the tool to use.
+3. HEIC/RAW Pre-Conversion: If you frequently use HEIC or RAW files, consider a dedicated utility (like a simple shell script using sips on macOS) to batch convert them to JPEGs before running your Pillow script. This can simplify the workflow, as Pillow is mainly for processing existing raster images (like JPEGs).
