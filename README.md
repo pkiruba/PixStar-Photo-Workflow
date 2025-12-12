@@ -2,23 +2,52 @@
 ---
 **Standard Operating Procedure (SOP) for Organizing and Syncing Photos from OneDrive**
 
-This workflow ensures all photos for the Pix-Star frame are managed simply and consistently, using a **YYYY_MM** structure and a Python script for optimized file preparation.
+This workflow ensures all photos for the Pix-Star frame are managed simply and consistently, using a **YYYY_MM** structure and a Python script (`cleanup_photos.py`) for optimized file preparation.
 
 ---
 
-## 1. 📂 OneDrive File Structure
+## 1. ⬇️ Installation and Setup
+
+### Prerequisites
+
+You must have **Python** installed on your system.
+
+1.  **Clone the Repository**
+    ```bash
+    git clone [Your_Repo_URL]
+    cd [your-repo-name]
+    ```
+
+2.  **Install Dependencies**
+    The script requires the Pillow library for image processing and `tqdm` for the progress bar.
+    ```bash
+    pip install Pillow tqdm
+    ```
+
+## 2. 📂 OneDrive File Structure and File Handling
 
 All photo albums intended for the Pix-Star frame **MUST** be located within a single, dedicated directory in OneDrive.
 
-### Root Directory
+### File Handling Policy (Important!)
 
-* **Name:** `PixStar_Photos_CLEAN/` (This folder will hold the optimized photos after cleanup)
+The `cleanup_photos.py` script is an **optimization and cleaning tool** designed only for JPEGs. You must pre-convert proprietary formats to JPEG before running the script.
 
-The Pix-Star frame is configured to link to the subdirectories within this root folder, creating individual Web Albums.
+| File Type | Requires Pre-Conversion? | Script Action |
+| :--- | :--- | :--- |
+| **Proprietary RAW (.NEF, .CR2, .DNG)** | **YES.** | **The script will SKIP these files.** Must be converted to JPEG externally. |
+| **High Efficiency (.HEIC, .HEIF)** | **YES.** | **The script will SKIP these files.** Convert to JPEG externally. |
+| **Standard JPEG (.jpg, .jpeg)** | NO. | The script will **CLEAN** and **OPTIMIZE** these files (strip metadata, convert to RGB). |
 
-### Album Naming and Nesting
+### Directory Structure
 
-Use the `YYYY_MM_[Description]` format for easy sorting and reference.
+| Folder | Purpose |
+| :--- | :--- |
+| **Source** (e.g., `Original_Photos_Source`) | Where your raw/uncleaned JPEGs (and other files) are temporarily saved. **DO NOT LINK THIS TO PIX-STAR.** |
+| **Target** (e.g., `OneDrive/PixStar_Photos_CLEAN`) | **This is the folder structure you link to Pix-Star.** It contains only cleaned, optimized JPEGs. |
+
+### Album Naming Convention
+
+All subdirectories within your **Target** folder should follow the `YYYY_MM_[Description]` format.
 
 ```text
 └── OneDrive/
@@ -27,49 +56,43 @@ Use the `YYYY_MM_[Description]` format for easy sorting and reference.
         ├── 2025_02_Smith_Wedding/
         └── EVERGREEN_Landscapes_Scenery/
 ```
-## 2. 🧹 Photo Cleanup & Optimization Script
+## 3. 🚀 Usage (Running the Cleanup Script)
 
-To ensure 100% compatibility and fast loading on the Pix-Star frame, all photos must be stripped of complex metadata (like those from iPhone/DSLR RAW conversions) and saved as a standard JPEG.
-Prerequisites
+Execute the provided Python script, `cleanup_photos.py`, using the command line.
 
-Python: Ensure you have Python installed.
-
-Pillow and tqdm: Install the required libraries:
-    `pip install Pillow tqdm`
-    
-Usage
-
-Use the provided cleanup_photos.py script to process your source photos into the optimized destination folder.
-
-Example Command:
-
+### Command Syntax
+```text
+python cleanup_photos.py -s <SOURCE_DIR> -o <OUTPUT_DIR>
 ```
-python cleanup_photos.py -s /Users/YourName/Original_Photos_Source -o /Users/YourName/OneDrive/PixStar_Photos_CLEAN
 
-Argument,Description
--s or --source,"Required. The path to your raw/original photo storage (e.g., your local drive folder where you dump photos)."
--o or --output,"Required. The path to the target folder inside your OneDrive that will be linked to Pix-Star (e.g., .../OneDrive/PixStar_Photos_CLEAN)."
+| Argument | Description |
+| :--- | :--- |
+| `-s` or `--source` | **Required.** Full path to your folder containing the original/raw JPEGs. |
+| `-o` or `--output` | **Required.** Full path to the OneDrive folder (`PixStar_Photos_CLEAN`) where the optimized JPEGs will be saved. |
+
+### Example Execution
+```text
+python cleanup_photos.py --source "/Users/YourName/Desktop/Photo_Uploads" --output "/Users/YourName/OneDrive/PixStar_Photos_CLEAN"
 ```
-Script Functionality
+### Script Functionality Summary
 
-The script performs the following critical steps:
+* Metadata Stripping: Removes all complex EXIF/IPTC/XMP data to prevent skipped photos.
+* Color Space Fix: Converts images to the standard RGB color space.
+* Optimization: Re-saves the files as high-quality (90%) JPEGs.
+* Folder Structure: Automatically maintains the subdirectory structure.
 
-    Metadata Stripping: Removes all complex EXIF/IPTC/XMP data.
-
-    Color Space Fix: Converts images to the standard RGB color space.
-
-    Optimization: Re-saves the files as high-quality (90%) JPEGs.
-
-    Folder Structure: Automatically maintains the subdirectory structure.
-
-## 3. ✅ Pix-Star Best Practices
+## 4. ✅ Pix-Star Frame Best Practices
 
 These tips ensure the best experience on the digital frame.
 
-    Connectivity: Keep the frame connected to Wi-Fi for automatic syncs.
+### Linking Photos
 
-    Album Size: Avoid making extremely large albums for faster loading.
+* In your Pix-Star web account, disconnect any old, direct links to your OneDrive source folders.
 
-    Auto-Sync: Ensure auto-sync is enabled for all linked OneDrive albums.
+* Connect the subdirectories within your `PixStar_Photos_CLEAN` folder.
 
-    Slideshow Mode: To ensure every photo runs before repeating, change the frame's Sorting Mode from "Random" to "Newest/Oldest first" in the slideshow options menu.
+### Ensuring Full Cycle Playback
+
+If you use "Random" sorting, photos will repeat randomly. To ensure every photo is displayed once before the cycle repeats:
+1. On the Pix-Star frame, navigate to the Slideshow Options menu.
+2. Change the Sorting Mode from "Random" to "Newest first" or "Oldest first".
