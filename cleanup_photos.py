@@ -89,7 +89,7 @@ def main():
 
         # Use tqdm for a professional progress bar
         for file_name in tqdm(files, desc=f"Processing {relative_path}"):
-            if file_name.lower().endswith(('.jpg', '.jpeg')):
+            if file_name.lower().endswith(('.jpg', '.jpeg', '.png')):
                 source_file = os.path.join(root, file_name)
                 target_file = os.path.join(output_root, file_name)
                 
