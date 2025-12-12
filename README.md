@@ -1,7 +1,8 @@
 # 🖼️ PixStar Digital Photo Frame Management
+---
 **Standard Operating Procedure (SOP) for Organizing and Syncing Photos from OneDrive**
 
-This workflow ensures all photos for the Pix-Star frame are managed simply and consistently, primarily using a **Month_Year** structure.
+This workflow ensures all photos for the Pix-Star frame are managed simply and consistently, using a **YYYY_MM** structure and a Python script for optimized file preparation.
 
 ---
 
@@ -11,7 +12,7 @@ All photo albums intended for the Pix-Star frame **MUST** be located within a si
 
 ### Root Directory
 
-* **Name:** `PixStar_Photos/`
+* **Name:** `PixStar_Photos_CLEAN/` (This folder will hold the optimized photos after cleanup)
 
 The Pix-Star frame is configured to link to the subdirectories within this root folder, creating individual Web Albums.
 
@@ -21,38 +22,54 @@ Use the `YYYY_MM_[Description]` format for easy sorting and reference.
 
 ```text
 └── OneDrive/
-    └── PixStar_Photos/
-        ├── 2025_01_General/           <-- Default Monthly Folder (Bulk Photos)
-        │   ├── IMG_001.JPG
-        │   └── IMG_002.JPG
-        ├── 2025_02_Smith_Wedding/     <-- Event-Specific Folder (Curated)
-        │   ├── Ceremony_01.JPG
-        │   └── Reception_01.JPG
-        ├── 2025_03_General/
-        │   └── Photo_from_Jane.PNG
+    └── PixStar_Photos_CLEAN/  <-- Folder linked to Pix-Star
+        ├── 2025_01_General/
+        ├── 2025_02_Smith_Wedding/
         └── EVERGREEN_Landscapes_Scenery/
-            └── Sunset_2025.JPG
 ```
-Key Naming Conventions:
+## 2. 🧹 Photo Cleanup & Optimization Script
 
-* **Default Albums:** Use YYYY_MM_General/ for bulk, chronological photos.
+To ensure 100% compatibility and fast loading on the Pix-Star frame, all photos must be stripped of complex metadata (like those from iPhone/DSLR RAW conversions) and saved as a standard JPEG.
+Prerequisites
 
-* **Event Albums:** Use YYYY_MM_[Event_Name]/ for curated collections.
+Python: Ensure you have Python installed.
 
-* **Permanent Albums:** Use a clear identifier like EVERGREEN_[Topic]/ for photos that should always be in the rotation.
+Pillow and tqdm: Install the required libraries:
+    `pip install Pillow tqdm`
+    
+Usage
 
-## 2. ✅ Pix-Star Best Practices
+Use the provided cleanup_photos.py script to process your source photos into the optimized destination folder.
+
+Example Command:
+
+```
+python cleanup_photos.py -s /Users/YourName/Original_Photos_Source -o /Users/YourName/OneDrive/PixStar_Photos_CLEAN
+
+Argument,Description
+-s or --source,"Required. The path to your raw/original photo storage (e.g., your local drive folder where you dump photos)."
+-o or --output,"Required. The path to the target folder inside your OneDrive that will be linked to Pix-Star (e.g., .../OneDrive/PixStar_Photos_CLEAN)."
+```
+Script Functionality
+
+The script performs the following critical steps:
+
+    Metadata Stripping: Removes all complex EXIF/IPTC/XMP data.
+
+    Color Space Fix: Converts images to the standard RGB color space.
+
+    Optimization: Re-saves the files as high-quality (90%) JPEGs.
+
+    Folder Structure: Automatically maintains the subdirectory structure.
+
+## 3. ✅ Pix-Star Best Practices
 
 These tips ensure the best experience on the digital frame.
 
-* **Connectivity:** Keep the frame connected to Wi-Fi for automatic syncs.
+    Connectivity: Keep the frame connected to Wi-Fi for automatic syncs.
 
-* **Album Size:** Divide photos into monthly or event-based albums. Avoid making extremely large albums for faster loading times.
+    Album Size: Avoid making extremely large albums for faster loading.
 
-* **Photo Quality:** Use standard resolution images. Ultra-high resolution photos may slow down the slideshow.
+    Auto-Sync: Ensure auto-sync is enabled for all linked OneDrive albums.
 
-* **Auto-Sync:** Ensure auto-sync is enabled for all linked OneDrive albums so new photos appear automatically.
-
-* **Maintenance:** Periodically review and prune older albums to keep the slideshow fresh.
-
-* **Quick Share:** Use the frame’s unique email address for instant photo uploads from remote users.
+    Slideshow Mode: To ensure every photo runs before repeating, change the frame's Sorting Mode from "Random" to "Newest/Oldest first" in the slideshow options menu.
