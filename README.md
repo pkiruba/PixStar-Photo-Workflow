@@ -14,8 +14,8 @@ You must have **Python** installed on your system.
 
 1.  **Clone the Repository**
     ```bash
-    git clone [Your_Repo_URL]
-    cd [your-repo-name]
+    git clone https://github.com/pkiruba/PixStar-Photo-Workflow
+    cd PixStar-Photo-Workflow
     ```
 
 2.  **Install Dependencies**
