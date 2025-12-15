@@ -1,8 +1,6 @@
-# cleanup_photos.py
-
 import os
 import argparse
-from PIL import Image
+from PIL import Image, ImageOps
 from tqdm import tqdm
 import pandas as pd
 
@@ -37,13 +35,19 @@ def parse_arguments():
 
 def clean_and_save_jpeg(file_path, output_path, quality):
     """
-    Opens an image, strips all EXIF/metadata, converts to standard RGB, and saves as JPEG.
+    Opens an image, applies EXIF orientation, strips all EXIF/metadata, 
+    converts to standard RGB, and saves as JPEG.
     Returns processing metadata.
     """
     try:
         size_before_kb = os.path.getsize(file_path) / 1024
 
         img = Image.open(file_path)
+        
+        # Apply EXIF orientation to actual image pixels
+        # This rotates/flips the image according to EXIF orientation tag
+        img = ImageOps.exif_transpose(img)
+        
         width, height = img.size
 
         if img.mode not in ('RGB', 'L', 'P'):
